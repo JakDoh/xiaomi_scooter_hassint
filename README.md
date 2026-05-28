@@ -53,4 +53,4 @@ This integration is a Python re-implementation of research and code from:
 *   [miauth](https://github.com/dnandha/miauth) (dnandha)
 
 ## ⚠️ Disclaimer
-This is an experimental community-driven project and is not affiliated with Xiaomi or Ninebot. Use it at your own risk.
+This is an experimental project and is not affiliated with Xiaomi or Ninebot. Use it at your own risk.
