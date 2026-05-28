@@ -1,20 +1,19 @@
 # Xiaomi Mi Electric Scooter Integration for Home Assistant
 
-This is a custom Home Assistant integration for monitoring Xiaomi/Ninebot electric scooters (M365, Pro, Pro 2, 1S, Essential, Scooter 3). 
+This is a custom Home Assistant integration for monitoring older Xiaomi/Ninebot electric scooters (probably working with M365, Pro, Pro 2, 1S, Essential, Scooter 3). Tested only on Pro 2.
 
-Unlike older integrations, this version is designed for modern security requirements. It features a full re-implementation of **NinebotCrypto** and **miauth**, enabling it to communicate with newer, encrypted firmware versions that standard BLE trackers cannot access.
+It features a full re-implementation of **NinebotCrypto** and **miauth**, enabling it to communicate with encrypted BLE.
 
 ## 🚀 Features
 - **Config Flow Support:** Easy setup via the Home Assistant UI (no YAML editing required).
 - **Auto-Discovery:** Automatically finds nearby scooters via Bluetooth.
-- **Encrypted Communication:** Full support for AES-128 secure handshakes.
-- **Rich Telemetry:** Monitors battery levels, cell voltages, speed, mileage, temperature, and more.
+- **Full Telemetry:** Monitors battery levels, cell voltages, speed, mileage, temperature, and more.
 - **BLE Proxy Compatible:** Works with ESP32 Bluetooth Proxies.
 
 ## 🛠 Supported Versions
 This integration is specifically built to handle the encryption used in:
-- **BLE Versions:** 1.2.9, 1.3.x, 1.5.x and newer.
-- **Models:** All scooters using the Ninebot/Xiaomi protocol (M365 series, Pro series, 1S, Essential, Scooter 3).
+- **BLE Versions:** 1.2.9, 1.3.x, 1.5.x .
+- **Models:** All older scooters using the Ninebot/Xiaomi protocol (M365 series, Pro series, 1S, Essential, Scooter 3).
 
 ## 🚲 How to Setup
 
