@@ -18,7 +18,7 @@
       "user": {
         "description": "Prosím vyberte zařízení",
         "data": {
-          "address": ""
+          "address": "Zařízení"
         },
         "data_description": {
           "type": "type"
@@ -51,8 +51,22 @@
       }
     }
   },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Nastavení intervalu načítání (Polling)",
+        "data": {
+          "scan_interval_not_charging": "Interval při jízdě / na baterii (vteřiny)",
+          "scan_interval_charging": "Interval během NABÍJENÍ (vteřiny)"
+        }
+      }
+    }
+  },
   "entity": {
     "sensor": {
+      "mitoken": {
+        "name": "MiToken (Přístupový klíč)"
+      },
       "battery_level": {
         "name": "Baterie"
       },
@@ -147,10 +161,10 @@
         "name": "Celková doba jízdy na koloběžce"
       },
       "battery_overcharge_status": {
-        "name": "Napětí článku č.10"
+        "name": "Status přebití baterie"
       },
       "battery_overdischarge_status": {
-        "name": "Napětí článku č.10"
+        "name": "Status podvybití baterie"
       },
       "battery_remaining_cap": {
         "name": "Zbývající kapacita baterie"

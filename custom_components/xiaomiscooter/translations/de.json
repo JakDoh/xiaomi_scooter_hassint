@@ -1,0 +1,102 @@
+{
+  "config": {
+    "error": {
+      "cannot_connect": "Verbindung fehlgeschlagen",
+      "invalid_auth": "Ungültiger Schlüssel",
+      "unknown": "Unbekannter Fehler"
+    },
+    "abort": {
+      "no_devices_found": "Keine passenden Geräte gefunden",
+      "already_in_progress": "Bereits in Bearbeitung",
+      "already_configured": "Gerät ist bereits konfiguriert",
+      "cannot_connect": "Verbindung nicht möglich",
+      "not_implemeted": "Funktion noch nicht implementiert",
+      "invalid_auth": "Ungültiger Schlüssel",
+      "unknown": "Unbekannter Fehler"
+    },
+    "step": {
+      "user": {
+        "description": "Bitte wählen Sie Ihr Gerät aus",
+        "data": {
+          "address": "Gerät"
+        }
+      },
+      "auth_method": {
+        "title": "Authentifizierung",
+        "description": "Wählen Sie die Authentifizierungsmethode.\n\n**Scooter button pairing** startet den Kopplungsvorgang (erfordert das Drücken der Scooter-Taste) und speichert den Token.\n\n**Existing token / key** verwendet einen bereits vorhandenen Token.",
+        "data": {
+          "auth_method": "Methode"
+        }
+      },
+      "bluetooth_confirm": {
+        "title": "Gerät bestätigen",
+        "description": "Bitte bestätigen Sie das Hinzufügen dieses Geräts"
+      },
+      "auth_confirm": {
+        "title": "Aktion erforderlich",
+        "description": "Nach dem Klicken auf 'Senden' verbindet sich HA mit dem Scooter. Das Bluetooth-Symbol wird auf dem Display angezeigt. Warten Sie, bis es verschwindet, und drücken Sie dann kurz die Ein-/Aus-Taste am Scooter. Der Scooter wird dann gekoppelt."
+      },
+      "auth_token": {
+        "title": "Token eingeben",
+        "description": "Geben Sie den MiToken als Hex-Wert ein.",
+        "data": {
+          "token": "Token"
+        },
+        "data_description": {
+          "token": "Hex-Token, z.B. 00112233AABBCCDD"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Aktualisierungsintervall (Polling)",
+        "data": {
+          "scan_interval_not_charging": "Intervall beim Fahren / auf Batterie (Sekunden)",
+          "scan_interval_charging": "Intervall beim LÄDEN (Sekunden)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "mitoken": { "name": "MiToken (Zugriffsschlüssel)" },
+      "battery_level": { "name": "Akkustand" },
+      "battery_voltage": { "name": "Akkuspannung" },
+      "battery_nominal_voltage": { "name": "Akku-Nennspannung" },
+      "battery_current": { "name": "Akkustrom" },
+      "battery_charge_times": { "name": "Gesamte Ladezyklen" },
+      "battery_charge_full_cycles": { "name": "Vollständige Ladezyklen" },
+      "battery_health": { "name": "Akkugesundheit" },
+      "battery_temperature": { "name": "Akkutemperatur" },
+      "battery_temperature_1": { "name": "Akkutemperatur Sensor 1" },
+      "battery_temperature_2": { "name": "Akkutemperatur Sensor 2" },
+      "battery_balance_status": { "name": "Balancer-Status" },
+      "scooter_total_mileage": { "name": "Gesamtkilometerstand" },
+      "battery_charging_status": { "name": "Ladestatus" },
+      "battery_cell1_voltage": { "name": "Zelle 1 Spannung" },
+      "battery_cell2_voltage": { "name": "Zelle 2 Spannung" },
+      "battery_cell3_voltage": { "name": "Zelle 3 Spannung" },
+      "battery_cell4_voltage": { "name": "Zelle 4 Spannung" },
+      "battery_cell5_voltage": { "name": "Zelle 5 Spannung" },
+      "battery_cell6_voltage": { "name": "Zelle 6 Spannung" },
+      "battery_cell7_voltage": { "name": "Zelle 7 Spannung" },
+      "battery_cell8_voltage": { "name": "Zelle 8 Spannung" },
+      "battery_cell9_voltage": { "name": "Zelle 9 Spannung" },
+      "battery_cell10_voltage": { "name": "Zelle 10 Spannung" },
+      "battery_overcharge_times": { "name": "Anzahl Überladungen" },
+      "battery_overdischarge_times": { "name": "Anzahl Tiefentladungen" },
+      "battery_designed_capacity": { "name": "Nennkapazität" },
+      "scooter_firmware_ver": { "name": "Scooter-Firmware" },
+      "scooter_remaining_mileage": { "name": "Verbleibende Reichweite" },
+      "scooter_predicted_mileage": { "name": "Geschätzte Reichweite" },
+      "scooter_total_run_time": { "name": "Gesamte Einschaltzeit" },
+      "scooter_total_ride_time": { "name": "Gesamte Fahrzeit" },
+      "battery_overcharge_status": { "name": "Überladestatus" },
+      "battery_overdischarge_status": { "name": "Tiefentladestatus" },
+      "battery_remaining_cap": { "name": "Verbleibende Kapazität" },
+      "battery_full_charge_capacity": { "name": "Vollladekapazität" }
+    }
+  }
+}

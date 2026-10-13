@@ -1,10 +1,12 @@
-
 DOMAIN = "xiaomiscooter"
 DEFAULT_SCAN_INTERVAL = 100
 CONF_AUTH_METHOD = "auth_method"
 CONF_TOKEN = "token"
 AUTH_METHOD_BUTTON = "button"
 AUTH_METHOD_TOKEN = "token"
-SCOOTER_LIST = ["MIScooter",
-                "Scooter",
-                "Ninebot"]
+SCOOTER_LIST = ["MiScooter", "MIScooter", "Scooter", "Ninebot"]
+
+CONF_SCAN_INTERVAL_CHARGING = "scan_interval_charging"
+CONF_SCAN_INTERVAL_NOT_CHARGING = "scan_interval_not_charging"
+DEFAULT_SCAN_INTERVAL_CHARGING = 60
+DEFAULT_SCAN_INTERVAL_NOT_CHARGING = 300
