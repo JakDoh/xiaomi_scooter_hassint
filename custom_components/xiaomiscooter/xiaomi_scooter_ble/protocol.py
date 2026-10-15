@@ -128,21 +128,20 @@ BATTERY_SN_MAP = {
 
 
 def _decode_ascii(data: bytes) -> str:
-    return data.decode("utf-8").rstrip("\x00")
-
+    return data.decode("utf-8", errors="ignore").rstrip("\x00")
 
 def decode_initial_scooter_data(data: bytes) -> dict[str, Any]:
+    data = data.ljust(22, b'\x00')[:22]
     raw_serial_num, version = struct.unpack("<14s6x1H", data)
     return {
         "raw_serial_num": _decode_ascii(raw_serial_num),
         "version": version,
     }
 
-
 def decode_initial_battery_data(data: bytes) -> dict[str, Any]:
+    data = data.ljust(22, b'\x00')[:22]
     batt_serial_num, firmware_ver, designed_capacity, full_charge_capacity, nominal_voltage = struct.unpack(
-        "<14s4H",
-        data,
+        "<14s4H", data
     )
     return {
         "batt_serial_num": _decode_ascii(batt_serial_num),
@@ -152,8 +151,8 @@ def decode_initial_battery_data(data: bytes) -> dict[str, Any]:
         "battery_nominal_voltage": nominal_voltage / 1e2,
     }
 
-
 def decode_runtime_scooter_data(data: bytes) -> dict[str, float]:
+    data = data.ljust(54, b'\x00')[:54]
     values = struct.unpack("<3H8xH2x3H4xL8xH4x2L", data)
     return {
         "scooter_remaining_mileage": values[4] / 1e2,
@@ -164,8 +163,8 @@ def decode_runtime_scooter_data(data: bytes) -> dict[str, float]:
         "scooter_total_ride_time": values[10] / 3600,
     }
 
-
 def decode_runtime_battery_data_ch1(data: bytes) -> dict[str, int]:
+    data = data.ljust(10, b'\x00')[:10]
     charge_full_cycles, charge_times, accumulative_charge_cap_counter, _, _ = struct.unpack("<2HL2B", data)
     return {
         "battery_charge_full_cycles": charge_full_cycles,
@@ -173,8 +172,8 @@ def decode_runtime_battery_data_ch1(data: bytes) -> dict[str, int]:
         "battery_accumulative_charge_cap_counter": accumulative_charge_cap_counter,
     }
 
-
 def decode_runtime_battery_data_ch2(data: bytes) -> dict[str, str | float | int]:
+    data = data.ljust(24, b'\x00')[:24]
     values = struct.unpack("<3H1h1H2b6H", data)
     charging_status = (values[0] & (BMS_BOOLMARK_CHARGE | BMS_BOOLMARK_CHARGERIN)) != 0
     return {
@@ -188,10 +187,9 @@ def decode_runtime_battery_data_ch2(data: bytes) -> dict[str, str | float | int]
         "battery_health": values[12],
     }
 
-
 def decode_runtime_battery_cell_data(data: bytes) -> dict[str, float]:
     sensors: dict[str, float] = {}
-    # Pevné přiřazení indexu 1 až 10 bez ohledu na nulové hodnoty
+    data = data.ljust(20, b'\x00')[:20]
     for idx, cell_voltage in enumerate(struct.unpack("<10H", data), start=1):
         if cell_voltage > 0:
             sensors[f"battery_cell{idx}_voltage"] = cell_voltage / 1e3
