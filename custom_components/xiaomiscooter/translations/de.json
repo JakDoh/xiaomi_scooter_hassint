@@ -51,10 +51,30 @@
   "options": {
     "step": {
       "init": {
+        "title": "Integrationsoptionen",
+        "description": "Wählen Sie eine Aktion:",
+        "menu_options": {
+          "polling": "Aktualisierungsintervall ändern",
+          "reauth_button": "Scooter neu koppeln (über Taste)",
+          "reauth_token": "Neuen Token manuell eingeben"
+        }
+      },
+      "polling": {
         "title": "Aktualisierungsintervall (Polling)",
         "data": {
           "scan_interval_not_charging": "Intervall beim Fahren / auf Batterie (Sekunden)",
           "scan_interval_charging": "Intervall beim LÄDEN (Sekunden)"
+        }
+      },
+      "reauth_button": {
+        "title": "Kopplung (Aktion erforderlich)",
+        "description": "Klicken Sie auf 'Senden' und warten Sie auf den Piepton des Scooters. Drücken Sie dann schnell die Ein-/Aus-Taste am Scooter, um die neue Kopplung zu bestätigen."
+      },
+      "reauth_token": {
+        "title": "Token aktualisieren",
+        "description": "Geben Sie den neuen MiToken als Hex-Wert ein.",
+        "data": {
+          "token": "Neuer Token (Hex)"
         }
       }
     }
