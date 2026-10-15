@@ -51,10 +51,30 @@
   "options": {
     "step": {
       "init": {
+        "title": "Integration Options",
+        "description": "Choose an action:",
+        "menu_options": {
+          "polling": "Change polling intervals",
+          "reauth_button": "Re-pair scooter (via button)",
+          "reauth_token": "Enter new token manually"
+        }
+      },
+      "polling": {
         "title": "Polling Configuration",
         "data": {
           "scan_interval_not_charging": "Polling interval when NOT charging (seconds)",
           "scan_interval_charging": "Polling interval when CHARGING (seconds)"
+        }
+      },
+      "reauth_button": {
+        "title": "Pairing (Action Required)",
+        "description": "After clicking 'Submit', wait for the scooter to beep, then quickly press the physical power button on the scooter display to confirm the new pairing."
+      },
+      "reauth_token": {
+        "title": "Update Token",
+        "description": "Enter the new MiToken used to log into the scooter.",
+        "data": {
+          "token": "New Token (Hex)"
         }
       }
     }
