@@ -202,33 +202,43 @@ class MiClient(object):
 
         self.received_data = b''
         
+        # Logika pro nešifrované dotazy
         if not self.keys:
             await self.ble.write_chunked(UUIDS.TX, cmd)
-            for _ in range(10):
-                await self.ble.wait_notify(secs=0.2)
-                if self.received_data:
+            for _ in range(15):
+                if len(self.received_data) >= 3:
                     break
+                await self.ble.wait_notify(secs=0.1)
+            
+            if len(self.received_data) >= 3:
+                # Očekávaná délka M365 unencrypted paketu: hlavička(2) + size(1) + payload(size) + crc(2) = size + 5
+                expected_size = self.received_data[2] + 5
+                for _ in range(30):
+                    if len(self.received_data) >= expected_size:
+                        break
+                    await self.ble.wait_notify(secs=0.1)
+                    
             return self.received_data if self.received_data else None
 
+        # Logika pro šifrované dotazy (MiAuth)
         res = MiCrypto.encrypt_uart(self.keys['app_key'], self.keys['app_iv'], cmd, it=self.uart_it)
         await self.ble.write_chunked(UUIDS.TX, res)
         self.uart_it += 1
 
-        # OPRAVA 1: Počkáme minimálně na první 3 bajty, abychom zjistili očekávanou délku
-        for _ in range(10):
-            await self.ble.wait_notify(secs=0.1)
+        for _ in range(15):
             if len(self.received_data) >= 3:
                 break
+            await self.ble.wait_notify(secs=0.1)
                 
-        # OPRAVA 2: Pokud máme hlavičku, počkáme na zbytek paketu
         if len(self.received_data) >= 3:
-            expected_size = self.received_data[2] + 5
-            for _ in range(20):
+            # Očekávaná délka MiAuth paketu: payload(size) + 17 bajtů šifrovací režie
+            expected_size = self.received_data[2] + 17
+            for _ in range(40):
                 if len(self.received_data) >= expected_size:
                     break
                 await self.ble.wait_notify(secs=0.1)
 
-        if len(self.received_data) < 7:
+        if len(self.received_data) < 17:
             return None
 
         try:
@@ -237,5 +247,5 @@ class MiClient(object):
                 self.keys['dev_iv'],
                 self.received_data)[3:-4]
         except Exception as e:
-            _LOGGER.debug("Decryption failed (InvalidTag or corrupted packet): %r", e)
+            _LOGGER.debug("Decryption failed: %r", e)
             return None
