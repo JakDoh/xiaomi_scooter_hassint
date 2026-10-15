@@ -216,11 +216,19 @@ class ScooterConfigFlow(ConfigFlow, domain=DOMAIN):
         )
 
 class OptionsFlowHandler(OptionsFlow):
-    """Handle options flow for changing intervals."""
+    """Handle options flow for changing intervals and re-pairing."""
     def __init__(self, config_entry: ConfigEntry) -> None:
         self._config_entry = config_entry
 
     async def async_step_init(self, user_input=None) -> FlowResult:
+        """Zobrazí rozcestník (Menu) pro volbu akce."""
+        return self.async_show_menu(
+            step_id="init",
+            menu_options=["polling", "reauth_button", "reauth_token"]
+        )
+
+    async def async_step_polling(self, user_input=None) -> FlowResult:
+        """Původní nastavení intervalů."""
         if user_input is not None:
             return self.async_create_entry(title="", data=user_input)
 
@@ -235,7 +243,66 @@ class OptionsFlowHandler(OptionsFlow):
             ): vol.All(vol.Coerce(int), vol.Range(min=10, max=3600)),
         })
 
+        return self.async_show_form(step_id="polling", data_schema=schema)
+
+    async def async_step_reauth_button(self, user_input=None) -> FlowResult:
+        """Vyvolá nové párování přes tlačítko u existující koloběžky."""
+        errors = {}
+        if user_input is not None:
+            address = self._config_entry.unique_id
+            ble_device = bluetooth.async_ble_device_from_address(self.hass, address, connectable=True)
+            if ble_device is None:
+                errors["base"] = "cannot_connect"
+            else:
+                scooter = ScooterBluetoothDeviceData(True)
+                try:
+                    await scooter.register_device(ble_device)
+                    token = scooter.token_hex()
+                    if token is None:
+                        raise ValueError("No token received")
+
+                    # Přepis originálního data objektu (jádro HA to uloží a samo reloadne integraci)
+                    new_data = dict(self._config_entry.data)
+                    new_data[CONF_TOKEN] = token
+                    new_data[CONF_AUTH_METHOD] = AUTH_METHOD_BUTTON
+                    self.hass.config_entries.async_update_entry(self._config_entry, data=new_data)
+                    
+                    return self.async_create_entry(title="", data=self._config_entry.options)
+                except Exception as err:
+                    _LOGGER.error("Re-pairing via button failed: %r", err)
+                    errors["base"] = "cannot_connect"
+
+        return self.async_show_form(step_id="reauth_button", errors=errors)
+
+    async def async_step_reauth_token(self, user_input=None) -> FlowResult:
+        """Povolí zadání nového tokenu ručně u existující koloběžky."""
+        errors = {}
+        if user_input is not None:
+            token = user_input[CONF_TOKEN]
+            address = self._config_entry.unique_id
+            ble_device = bluetooth.async_ble_device_from_address(self.hass, address, connectable=True)
+            if ble_device is None:
+                errors["base"] = "cannot_connect"
+            else:
+                try:
+                    scooter = ScooterBluetoothDeviceData(True, token=token)
+                    await scooter.initialize_device(ble_device)
+                    
+                    # Přepis originálního data objektu a reload
+                    new_data = dict(self._config_entry.data)
+                    new_data[CONF_TOKEN] = token
+                    new_data[CONF_AUTH_METHOD] = AUTH_METHOD_TOKEN
+                    self.hass.config_entries.async_update_entry(self._config_entry, data=new_data)
+                    
+                    return self.async_create_entry(title="", data=self._config_entry.options)
+                except ValueError:
+                    errors[CONF_TOKEN] = "invalid_auth"
+                except Exception as err:
+                    _LOGGER.error("Token update failed: %r", err)
+                    errors["base"] = "cannot_connect"
+
         return self.async_show_form(
-            step_id="init",
-            data_schema=schema,
+            step_id="reauth_token",
+            data_schema=vol.Schema({vol.Required(CONF_TOKEN): str}),
+            errors=errors
         )
